@@ -1,0 +1,17 @@
+import { AlertTriangle, Bot, LoaderCircle, Send, UserRound } from 'lucide-react'
+import { useState } from 'react'
+import api, { getErrorMessage } from '../api/client'
+import PageHeader from '../components/PageHeader'
+
+const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+export default function Chatbot() {
+  const [messages, setMessages] = useState([{ role: 'bot', text: 'Hello! I can share general guidance about symptoms, prevention, and when to seek care. How can I help?', time: now() }])
+  const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+  const send = async (event) => { event.preventDefault(); const text = input.trim(); if (!text || loading) return; setInput(''); setMessages((items) => [...items, { role: 'user', text, time: now() }]); setLoading(true); try { const { data } = await api.post('/chat', { message: text }); setMessages((items) => [...items, { role: 'bot', text: data.response, time: now(), emergency: data.emergency }]) } catch (error) { setMessages((items) => [...items, { role: 'bot', text: getErrorMessage(error), time: now(), error: true }]) } finally { setLoading(false) } }
+  return <div className="mx-auto max-w-4xl"><PageHeader eyebrow="General consultation" title="Health guidance chatbot" description="Ask about common symptoms and safe next steps. This assistant does not diagnose conditions." />
+    <div className="mb-4 flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900"><AlertTriangle className="mt-0.5 shrink-0" size={19} /><p><strong>Medical disclaimer:</strong> General information only. Call emergency services for chest pain, breathing difficulty, unconsciousness, seizure, or stroke symptoms.</p></div>
+    <section className="card overflow-hidden"><div className="flex items-center gap-3 border-b border-slate-200 p-4"><span className="grid h-10 w-10 place-items-center rounded-full bg-teal-100 text-teal-700"><Bot /></span><div><p className="font-bold">OutbreakAI Assistant</p><p className="text-xs text-emerald-600">● Available</p></div></div><div className="h-[480px] space-y-5 overflow-y-auto bg-slate-50 p-4 sm:p-6">{messages.map((message, index) => <div key={index} className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}><span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full ${message.role === 'user' ? 'bg-ink text-white' : 'bg-teal-100 text-teal-700'}`}>{message.role === 'user' ? <UserRound size={16} /> : <Bot size={16} />}</span><div className={`max-w-[78%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm ${message.role === 'user' ? 'rounded-tr-sm bg-teal-600 text-white' : message.emergency ? 'rounded-tl-sm border border-red-200 bg-red-50 text-red-800' : 'rounded-tl-sm bg-white text-slate-700'}`}><p>{message.text}</p><p className={`mt-1 text-[10px] ${message.role === 'user' ? 'text-teal-100' : 'text-slate-400'}`}>{message.time}</p></div></div>)}{loading && <div className="flex items-center gap-2 text-sm text-slate-500"><LoaderCircle className="animate-spin" size={16} /> Thinking…</div>}</div><form onSubmit={send} className="flex gap-2 border-t border-slate-200 bg-white p-4"><input className="field" value={input} onChange={(event) => setInput(event.target.value)} placeholder="Describe your concern…" aria-label="Message" /><button className="btn-primary !px-4" disabled={loading || !input.trim()}><Send size={18} /><span className="hidden sm:inline">Send</span></button></form></section>
+  </div>
+}
+

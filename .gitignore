@@ -1,0 +1,10 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+node_modules/
+node_modules_broken/
+dist/
+.DS_Store
+database/*.db
+model/synthetic_lab_data.csv

@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { font-family: 'DM Sans', sans-serif; color: #102a43; background: #f7fafc; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+button, input, select, textarea { font: inherit; }
+
+@layer components {
+  .card { @apply rounded-2xl border border-slate-200 bg-white shadow-soft; }
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-xl bg-teal-600 px-5 py-3 font-semibold text-white transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60; }
+  .btn-secondary { @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 font-semibold text-ink transition hover:border-teal-500 hover:text-teal-700; }
+  .field { @apply w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-100; }
+  .label { @apply mb-1.5 block text-sm font-semibold text-slate-700; }
+}
+

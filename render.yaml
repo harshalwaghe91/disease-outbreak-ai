@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: outbreak-ai-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt && python ../model/train_model.py
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.11
+      - key: FRONTEND_URL
+        sync: false
+      - key: MODEL_PATH
+        value: ../model/outbreak_model.pkl
+      - key: DATABASE_PATH
+        value: ../database/outbreak.db
+
