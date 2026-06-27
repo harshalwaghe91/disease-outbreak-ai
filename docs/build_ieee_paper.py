@@ -368,9 +368,9 @@ def add_title_block(doc):
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.space_after = Pt(7)
     r = p.add_run(
-        "Department of Electronics and Telecommunication Engineering\n"
-        "Suryodaya College of Engineering and Technology, Nagpur\n"
-        "Nagpur, Maharashtra, India\n"
+        "Electronics and telecommunication department\n"
+        "Suryodaya college of engineering and technology, Nagpur\n"
+        "Nagpur, Maharashtra\n"
         "harshalwaghe91@gmail.com"
     )
     set_run_font(r, 10)
